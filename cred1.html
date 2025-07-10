@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>CRUD Application</title>
+</head>
+<body>
+  <form id="userform">
+    <input type="text" id="product" placeholder="Enter your product..." required><br>
+    <input type="number" id="price" placeholder="Enter your price..." required><br>
+    <button type="submit">ADDUSER</button><br>
+  </form>
+
+  <table border="1">
+    <thead>
+      <tr>
+        <th>product</th>
+        <th>price</th>
+        <th>Edit</th>
+        <th>Delete</th>
+      </tr>
+    </thead>
+    <tbody id="userbody"></tbody>
+  </table>
+
+  <script>
+    const userform = document.getElementById('userform');
+    const productInput = document.getElementById('product');
+    const priceInput = document.getElementById('price');
+    const userbody = document.getElementById('userbody');
+
+    let user = [];
+    let editIndex = null;
+
+    userform.addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const product = productInput.value.trim();
+      const price = priceInput.value.trim();
+
+      if (editIndex === null) {
+        user.push({ product, price });
+      } else {
+        user[editIndex] = { product, price };
+        editIndex = null;
+      }
+
+      userform.reset();
+      renderTable();
+    });
+
+    function renderTable() {
+      userbody.innerHTML = '';
+      user.forEach((userData, index) => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${userData.name}</td>
+          <td>${userData.email}</td>
+          <td><button onclick="editUser(${index})">Edit</button></td>
+          <td><button onclick="deleteUser(${index})">Delete</button></td>
+        `;
+        userbody.appendChild(row);
+      });
+    }
+
+    function editUser(index) {
+      const userData = user[index];
+      nameInput.value = userData.name;
+      emailInput.value = userData.email;
+      editIndex = index;
+    }
+
+    function deleteUser(index) {
+      user.splice(index, 1);
+      renderTable();
+    }
+  </script>
+</body>
+</html>
